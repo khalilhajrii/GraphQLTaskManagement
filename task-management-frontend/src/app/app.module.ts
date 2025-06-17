@@ -1,26 +1,40 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule, provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { APOLLO_OPTIONS } from 'apollo-angular';
+import { BrowserModule } from '@angular/platform-browser';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { Apollo, APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { InMemoryCache } from '@apollo/client/core';
 
+// Feature modules
+import { AuthModule } from './auth/auth.module';
+import { SharedModule } from './shared/shared.module';
+
+// Components
+import { HomeComponent } from './home/home.component';
+
+// Interceptors
+import { TokenInterceptor } from './auth/interceptors/token.interceptor';
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    AuthModule,
+    SharedModule
   ],
   providers: [
-    provideClientHydration(withEventReplay()),
+    Apollo,
     {
       provide: APOLLO_OPTIONS,
-      useFactory(httpLink: HttpLink) {
+      useFactory: (httpLink: HttpLink) => {
         return {
           cache: new InMemoryCache(),
           link: httpLink.create({
@@ -30,6 +44,11 @@ import { InMemoryCache } from '@apollo/client/core';
       },
       deps: [HttpLink],
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

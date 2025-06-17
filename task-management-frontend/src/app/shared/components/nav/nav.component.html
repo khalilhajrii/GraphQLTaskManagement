@@ -1,0 +1,38 @@
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-brand">
+      <a routerLink="/" class="logo">Task Management</a>
+      <button class="menu-toggle" (click)="toggleMenu()" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    
+    <div class="navbar-menu" [ngClass]="{'is-active': isMenuOpen}">
+      <div class="navbar-start">
+        <a routerLink="/" class="navbar-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+        <a *ngIf="currentUser" routerLink="/tasks" class="navbar-item" routerLinkActive="active">Tasks</a>
+      </div>
+      
+      <div class="navbar-end">
+        <ng-container *ngIf="!currentUser">
+          <a routerLink="/login" class="navbar-item" routerLinkActive="active">Login</a>
+          <a routerLink="/register" class="navbar-item" routerLinkActive="active">Register</a>
+        </ng-container>
+        
+        <div *ngIf="currentUser" class="navbar-item has-dropdown" [ngClass]="{'is-active': isMenuOpen}">
+          <a class="navbar-link">
+            {{ currentUser.fullName || currentUser.username }}
+          </a>
+          
+          <div class="navbar-dropdown">
+            <a routerLink="/profile" class="navbar-item">Profile</a>
+            <hr class="navbar-divider">
+            <a (click)="logout()" class="navbar-item">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
