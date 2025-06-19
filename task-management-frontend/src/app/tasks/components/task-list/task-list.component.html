@@ -1,0 +1,47 @@
+<div class="task-list-container">
+  <div class="task-header">
+    <h1>My Tasks</h1>
+    <button class="btn btn-primary" routerLink="/tasks/new">Add New Task</button>
+  </div>
+
+  <div *ngIf="loading" class="loading-spinner">
+    <div class="spinner"></div>
+    <p>Loading tasks...</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!loading && tasks.length === 0" class="no-tasks-message">
+    <p>You don't have any tasks yet. Click the "Add New Task" button to create one.</p>
+  </div>
+
+  <div *ngIf="!loading && tasks.length > 0" class="task-list">
+    <div *ngFor="let task of tasks" class="task-card" [ngClass]="{'completed': task.completed}">
+      <div class="task-content">
+        <div class="task-status">
+          <input 
+            type="checkbox" 
+            [checked]="task.completed" 
+            (change)="toggleTaskCompletion(task)"
+            class="task-checkbox"
+          >
+        </div>
+        <div class="task-details">
+          <h3 class="task-title">{{ task.title }}</h3>
+          <p *ngIf="task.description" class="task-description">{{ task.description }}</p>
+          <p class="task-date">Created: {{ task.createdAt | date:'medium' }}</p>
+        </div>
+      </div>
+      <div class="task-actions">
+        <button class="btn btn-sm btn-outline-primary" [routerLink]="['/tasks', task.id]">
+          <i class="fas fa-edit"></i> Edit
+        </button>
+        <button class="btn btn-sm btn-outline-danger" (click)="deleteTask(task.id)">
+          <i class="fas fa-trash"></i> Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
