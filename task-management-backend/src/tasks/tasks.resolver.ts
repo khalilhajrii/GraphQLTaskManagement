@@ -32,8 +32,7 @@ export class TasksResolver {
     createTask(
         @Args('input') input: CreateTaskInput,
         @CurrentUser() user: User
-    ): Promise<Task> {
-        // Override userId with the current user's id for security
+    ): Promise<Task| null> {
         return this.tasksService.create({
             ...input,
             userId: user.id
