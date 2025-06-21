@@ -1,35 +1,54 @@
-<nav class="navbar">
-  <div class="container">
-    <div class="navbar-brand">
-      <a routerLink="/" class="logo">Task Management</a>
-      <button class="menu-toggle" (click)="toggleMenu()" aria-label="Toggle navigation">
-        <span></span>
-        <span></span>
-        <span></span>
+<nav class="main-nav">
+  <div class="nav-container">
+    <div class="nav-header">
+      <a routerLink="/" class="nav-logo">
+        <i class="fas fa-tasks"></i>
+        <span>TaskFlow</span>
+      </a>
+      <button class="nav-toggle" (click)="toggleMenu()" aria-label="Toggle navigation">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
       </button>
     </div>
     
-    <div class="navbar-menu" [ngClass]="{'is-active': isMenuOpen}">
-      <div class="navbar-start">
-        <a routerLink="/" class="navbar-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-        <a *ngIf="currentUser" routerLink="/tasks" class="navbar-item" routerLinkActive="active">Tasks</a>
+    <div class="nav-menu" [class.active]="isMenuOpen">
+      <div class="nav-section">
+        <a routerLink="/" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <i class="fas fa-home"></i> Home
+        </a>
+        <a *ngIf="currentUser" routerLink="/tasks" class="nav-link" routerLinkActive="active">
+          <i class="fas fa-list-check"></i> Tasks
+        </a>
       </div>
       
-      <div class="navbar-end">
+      <div class="nav-section">
         <ng-container *ngIf="!currentUser">
-          <a routerLink="/login" class="navbar-item" routerLinkActive="active">Login</a>
-          <a routerLink="/register" class="navbar-item" routerLinkActive="active">Register</a>
+          <a routerLink="/login" class="nav-link" routerLinkActive="active">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </a>
+          <a routerLink="/register" class="nav-link" routerLinkActive="active">
+            <i class="fas fa-user-plus"></i> Register
+          </a>
         </ng-container>
         
-        <div *ngIf="currentUser" class="navbar-item has-dropdown" [ngClass]="{'is-active': isMenuOpen}">
-          <a class="navbar-link">
-            {{ currentUser.fullName || currentUser.username }}
-          </a>
+        <div *ngIf="currentUser" class="user-dropdown">
+          <button class="user-toggle" (click)="toggleUserMenu()">
+            <div class="user-avatar">
+              {{ (currentUser.fullName || currentUser.username)[0] | uppercase }}
+            </div>
+            <span class="user-name">{{ currentUser.fullName || currentUser.username }}</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
           
-          <div class="navbar-dropdown">
-            <a routerLink="/profile" class="navbar-item">Profile</a>
-            <hr class="navbar-divider">
-            <a (click)="logout()" class="navbar-item">Logout</a>
+          <div class="dropdown-menu" [class.show]="isUserMenuOpen">
+            <a routerLink="/profile" class="dropdown-item">
+              <i class="fas fa-user-circle"></i> Profile
+            </a>
+            <div class="dropdown-divider"></div>
+            <a (click)="logout()" class="dropdown-item">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
           </div>
         </div>
       </div>

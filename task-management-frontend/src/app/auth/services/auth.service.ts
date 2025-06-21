@@ -53,15 +53,31 @@ export class AuthService {
 
   constructor(private apollo: Apollo) {
     // Check if token exists in localStorage and set current user
-    this.loadStoredUser();
+    // Use setTimeout to defer the initialization to the next event cycle
+    // This helps break potential circular dependencies during initialization
+    setTimeout(() => {
+      this.loadStoredUser();
+    }, 0);
   }
 
   private loadStoredUser(): void {
-    // Check if we're in a browser environment where localStorage is available
-    if (typeof localStorage !== 'undefined') {
+    // Check if we're in a browser environment where window and localStorage are available
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       const token = localStorage.getItem(this.tokenKey);
       if (token) {
-        this.fetchCurrentUser().subscribe();
+        // Use a try-catch block to handle potential errors during initialization
+        try {
+          this.fetchCurrentUser().subscribe({
+            error: (err) => {
+              console.error('Error loading stored user:', err);
+              // Clear invalid token
+              this.logout();
+            }
+          });
+        } catch (error) {
+          console.error('Exception during user initialization:', error);
+          this.logout();
+        }
       }
     }
   }
@@ -76,7 +92,7 @@ export class AuthService {
       map((result: any) => result.data.login),
       tap(response => {
         // Store token in localStorage if available (browser environment)
-        if (typeof localStorage !== 'undefined') {
+        if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
           localStorage.setItem(this.tokenKey, response.access_token);
         }
         // Update current user
@@ -124,7 +140,7 @@ export class AuthService {
 
   logout(): void {
     // Remove token from localStorage if available
-    if (typeof localStorage !== 'undefined') {
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       localStorage.removeItem(this.tokenKey);
     }
     // Clear current user
@@ -134,16 +150,16 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    // Check if localStorage is available (browser environment)
-    if (typeof localStorage !== 'undefined') {
+    // Check if we're in a browser environment where window and localStorage are available
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       return !!localStorage.getItem(this.tokenKey);
     }
     return false;
   }
 
   getToken(): string | null {
-    // Check if localStorage is available (browser environment)
-    if (typeof localStorage !== 'undefined') {
+    // Check if we're in a browser environment where window and localStorage are available
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       return localStorage.getItem(this.tokenKey);
     }
     return null;

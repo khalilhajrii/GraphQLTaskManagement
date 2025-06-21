@@ -1,46 +1,117 @@
-<div class="task-list-container">
-  <div class="task-header">
-    <h1>My Tasks</h1>
-    <button class="btn btn-primary" routerLink="/tasks/new">Add New Task</button>
-  </div>
-
-  <div *ngIf="loading" class="loading-spinner">
-    <div class="spinner"></div>
-    <p>Loading tasks...</p>
-  </div>
-
-  <div *ngIf="error" class="alert alert-danger">
-    {{ error }}
-  </div>
-
-  <div *ngIf="!loading && tasks.length === 0" class="no-tasks-message">
-    <p>You don't have any tasks yet. Click the "Add New Task" button to create one.</p>
-  </div>
-
-  <div *ngIf="!loading && tasks.length > 0" class="task-list">
-    <div *ngFor="let task of tasks" class="task-card" [ngClass]="{'completed': task.completed}">
-      <div class="task-content">
-        <div class="task-status">
-          <input 
-            type="checkbox" 
-            [checked]="task.completed" 
-            (change)="toggleTaskCompletion(task)"
-            class="task-checkbox"
-          >
-        </div>
-        <div class="task-details">
-          <h3 class="task-title">{{ task.title }}</h3>
-          <p *ngIf="task.description" class="task-description">{{ task.description }}</p>
-          <p class="task-date">Created: {{ task.createdAt | date:'medium' }}</p>
+<div class="task-dashboard">
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h1 class="dashboard-title">
+        <i class="fas fa-tasks"></i> My Tasks
+        <span class="task-count">{{tasks.length}} {{tasks.length === 1 ? 'task' : 'tasks'}}</span>
+      </h1>
+      <div class="header-actions">
+        <button class="add-task-btn" routerLink="/tasks/new">
+          <i class="fas fa-plus"></i> Add New Task
+        </button>
+        <div class="view-toggle">
+          <button class="view-option active"><i class="fas fa-list"></i></button>
+          <button class="view-option"><i class="fas fa-th-large"></i></button>
         </div>
       </div>
+    </div>
+
+    <div class="task-filters">
+      <div class="filter-group">
+        <label>Filter:</label>
+        <select class="filter-select">
+          <option>All Tasks</option>
+          <option>Active</option>
+          <option>Completed</option>
+          <option>High Priority</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Sort:</label>
+        <select class="filter-select">
+          <option>Newest First</option>
+          <option>Oldest First</option>
+          <option>Due Date</option>
+          <option>Priority</option>
+        </select>
+      </div>
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Search tasks...">
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner-container">
+      <div class="loading-spinner"></div>
+      <p>Loading your tasks...</p>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="error-state">
+    <div class="error-alert">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div class="error-content">
+        <h4>Something went wrong</h4>
+        <p>{{ error }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && tasks.length === 0" class="empty-state">
+    <div class="empty-content">
+      <i class="fas fa-clipboard-list"></i>
+      <h3>No tasks found</h3>
+      <p>You don't have any tasks yet. Click below to create your first task.</p>
+      <button class="primary-btn" routerLink="/tasks/new">
+        <i class="fas fa-plus"></i> Create Task
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && tasks.length > 0" class="task-grid">
+    <div *ngFor="let task of tasks" class="task-item">
+      <div class="task-checkbox">
+        <label class="checkbox-container">
+          <input type="checkbox" [checked]="task.completed" (change)="toggleTaskCompletion(task)">
+          <span class="checkmark"></span>
+        </label>
+      </div>
+
+      <div class="task-main">
+        <div class="task-header">
+          <h3 class="task-title">{{ task.title }}</h3>
+        </div>
+
+        <p *ngIf="task.description" class="task-description">{{ task.description }}</p>
+
+        <div class="task-meta">
+          <div class="meta-item">
+            <i class="fas fa-calendar"></i>
+            <span>{{ task.createdAt | date:'mediumDate' }}</span>
+          </div>
+
+        </div>
+      </div>
+
       <div class="task-actions">
-        <button class="btn btn-sm btn-outline-primary" [routerLink]="['/tasks', task.id]">
-          <i class="fas fa-edit"></i> Edit
+        <button class="icon-btn edit-btn" [routerLink]="['/tasks', task.id]" title="Edit">
+          <i class="fas fa-pencil-alt"></i>
         </button>
-        <button class="btn btn-sm btn-outline-danger" (click)="deleteTask(task.id)">
-          <i class="fas fa-trash"></i> Delete
+        <button class="icon-btn delete-btn" (click)="deleteTask(task.id)" title="Delete">
+          <i class="fas fa-trash-alt"></i>
         </button>
+        <button class="icon-btn more-btn" title="More options">
+          <i class="fas fa-ellipsis-v"></i>
+        </button>
+      </div>
+
+      <div class="task-progress" *ngIf="task.completed">
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 100%"></div>
+        </div>
+        <span class="progress-text">Completed</span>
       </div>
     </div>
   </div>

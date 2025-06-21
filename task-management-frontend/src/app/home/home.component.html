@@ -1,30 +1,82 @@
 <div class="home-container">
   <div class="welcome-section">
-    <h1>Welcome to Task Management</h1>
-    <p *ngIf="currentUser">Hello, {{ currentUser.fullName || currentUser.username }}!</p>
-    <p *ngIf="!currentUser">Please log in to manage your tasks.</p>
-  </div>
-
-  <div class="content-section" *ngIf="currentUser">
-    <div class="card">
-      <div class="card-body">
-        <h2>Your Tasks</h2>
-        <p>View and manage your tasks from here.</p>
-        <a routerLink="/tasks" class="btn btn-primary">Go to Tasks</a>
-      </div>
+    <div class="welcome-content">
+      <h1>Task<span>Flow</span></h1>
+      <p class="welcome-message" *ngIf="currentUser">Welcome back, <span class="user-name">{{ currentUser.fullName || currentUser.username }}</span>! 👋</p>
+      <p class="welcome-message" *ngIf="!currentUser">Streamline your productivity with our intuitive task manager</p>
+      <div class="animated-wave"></div>
     </div>
   </div>
 
-  <div class="content-section" *ngIf="!currentUser">
-    <div class="card">
-      <div class="card-body">
-        <h2>Get Started</h2>
-        <p>Log in or register to start managing your tasks.</p>
-        <div class="button-group">
-          <a routerLink="/login" class="btn btn-primary">Login</a>
-          <a routerLink="/register" class="btn btn-outline-primary">Register</a>
+  <div class="content-grid">
+    <div class="content-section" *ngIf="currentUser">
+      <div class="modern-card task-card">
+        <div class="card-decoration"></div>
+        <div class="card-body">
+          <div class="card-header">
+            <h2><i class="fas fa-tasks"></i> Your Tasks</h2>
+            <div class="pulse-dot"></div>
+          </div>
+          <p>Organize, prioritize, and conquer your daily tasks</p>
+          <a routerLink="/tasks" class="modern-btn primary-btn">
+            View Tasks <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Additional card for stats/quick actions -->
+      <div class="modern-card stats-card">
+        <div class="stats-grid">
+          <div *ngIf="loading" class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+          </div>
+          <ng-container *ngIf="!loading">
+            <div class="stat-item">
+              <div class="stat-value">{{ pendingTasksCount }}</div>
+              <div class="stat-label">Pending</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">{{ completedTasksCount }}</div>
+              <div class="stat-label">Completed</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">{{ highPriorityTasksCount }}</div>
+              <div class="stat-label">High Priority</div>
+            </div>
+          </ng-container>
         </div>
       </div>
     </div>
+
+    <div class="content-section" *ngIf="!currentUser">
+      <div class="modern-card auth-card">
+        <div class="card-body">
+          <h2><i class="fas fa-rocket"></i> Get Started</h2>
+          <p>Join thousands boosting their productivity daily</p>
+          <div class="button-group">
+            <a routerLink="/login" class="modern-btn primary-btn">
+              <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+            <a routerLink="/register" class="modern-btn outline-btn">
+              <i class="fas fa-user-plus"></i> Register
+            </a>
+          </div>
+          <div class="social-auth">
+            <p>Or continue with</p>
+            <div class="social-icons">
+              <button class="social-btn google"><i class="fab fa-google"></i></button>
+              <button class="social-btn github"><i class="fab fa-github"></i></button>
+              <button class="social-btn microsoft"><i class="fab fa-microsoft"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="floating-shapes">
+    <div class="shape circle"></div>
+    <div class="shape triangle"></div>
+    <div class="shape square"></div>
   </div>
 </div>

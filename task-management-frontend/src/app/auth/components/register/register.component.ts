@@ -6,7 +6,7 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css'],
+  styleUrls: ['./register.component.scss'],
   standalone: false
 })
 export class RegisterComponent implements OnInit {
@@ -15,7 +15,7 @@ export class RegisterComponent implements OnInit {
   submitted = false;
   error = '';
   success = '';
-
+passwordStrength: string = 'none'
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -36,6 +36,26 @@ export class RegisterComponent implements OnInit {
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/']);
     }
+    this.registerForm.get('password')?.valueChanges.subscribe(val => {
+      if (!val) {
+        this.passwordStrength = 'none';
+        return;
+      }
+      
+      const hasLetters = /[a-zA-Z]/.test(val);
+      const hasNumbers = /\d/.test(val);
+      const hasSpecial = /[^a-zA-Z0-9]/.test(val);
+      
+      if (val.length < 6) {
+        this.passwordStrength = 'weak';
+      } else if (hasLetters && hasNumbers && val.length >= 8) {
+        this.passwordStrength = 'strong';
+      } else if ((hasLetters && hasNumbers) || (hasLetters && hasSpecial) || (hasNumbers && hasSpecial)) {
+        this.passwordStrength = 'medium';
+      } else {
+        this.passwordStrength = 'weak';
+      }
+    });
   }
 
   // Custom validator to check if password and confirm password match

@@ -1,42 +1,97 @@
-<div class="login-container">
-  <div class="login-card">
-    <h2>Login</h2>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
+<div class="auth-container">
+  <div class="auth-background">
+    <div class="auth-decoration">
+      <div class="decoration-circle"></div>
+      <div class="decoration-wave"></div>
+    </div>
+  </div>
+  
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="app-logo">
+        <i class="fas fa-tasks"></i>
+        <span>TaskFlow</span>
+      </div>
+      <h2>Welcome Back</h2>
+      <p>Sign in to continue to your dashboard</p>
+    </div>
+    
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="input-group">
         <label for="username">Username</label>
-        <input 
-          type="text" 
-          formControlName="username" 
-          class="form-control" 
-          [ngClass]="{ 'is-invalid': submitted && f['username'].errors }" 
-        />
-        <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">
-          <div *ngIf="f['username'].errors['required']">Username is required</div>
+        <div class="input-field" [ngClass]="{ 'invalid': submitted && f['username'].errors }">
+          <i class="fas fa-user"></i>
+          <input 
+            type="text" 
+            formControlName="username" 
+            id="username"
+            placeholder="Enter your username"
+          />
+        </div>
+        <div *ngIf="submitted && f['username'].errors" class="error-message">
+          <i class="fas fa-exclamation-circle"></i>
+          <span>Username is required</span>
         </div>
       </div>
       
-      <div class="form-group">
+      <div class="input-group">
         <label for="password">Password</label>
-        <input 
-          type="password" 
-          formControlName="password" 
-          class="form-control" 
-          [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" 
-        />
-        <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
-          <div *ngIf="f['password'].errors['required']">Password is required</div>
+        <div class="input-field" [ngClass]="{ 'invalid': submitted && f['password'].errors }">
+          <i class="fas fa-lock"></i>
+          <input 
+            type="password" 
+            formControlName="password" 
+            id="password"
+            placeholder="Enter your password"
+          />
+          <button type="button" class="password-toggle">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+        <div *ngIf="submitted && f['password'].errors" class="error-message">
+          <i class="fas fa-exclamation-circle"></i>
+          <span>Password is required</span>
         </div>
       </div>
       
-      <div class="form-group">
-        <button [disabled]="loading" class="btn btn-primary">
-          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-          Login
-        </button>
-        <a routerLink="/register" class="btn btn-link">Register</a>
+      <div class="options-row">
+        <label class="remember-me">
+          <input type="checkbox">
+          <span class="checkmark"></span>
+          Remember me
+        </label>
+        <a href="#" class="forgot-password">Forgot password?</a>
       </div>
       
-      <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+      <button type="submit" class="auth-button primary" [disabled]="loading">
+        <span *ngIf="loading" class="spinner"></span>
+        Sign In
+      </button>
+      
+      <div class="auth-divider">
+        <span>or continue with</span>
+      </div>
+      
+      <div class="social-auth">
+        <button type="button" class="social-button google">
+          <i class="fab fa-google"></i>
+        </button>
+        <button type="button" class="social-button github">
+          <i class="fab fa-github"></i>
+        </button>
+        <button type="button" class="social-button microsoft">
+          <i class="fab fa-microsoft"></i>
+        </button>
+      </div>
+      
+      <div class="auth-footer">
+        Don't have an account? <a routerLink="/register">Create one</a>
+      </div>
+      
+      <div *ngIf="error" class="auth-error">
+        <i class="fas fa-exclamation-triangle"></i>
+        {{error}}
+      </div>
     </form>
   </div>
 </div>

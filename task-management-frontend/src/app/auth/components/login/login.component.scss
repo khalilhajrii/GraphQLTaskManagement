@@ -1,0 +1,398 @@
+// Variables
+$primary-color: #4361ee;
+$secondary-color: #3f37c9;
+$accent-color: #4cc9f0;
+$light-color: #f8f9fa;
+$dark-color: #212529;
+$error-color: #ff4444;
+$success-color: #4caf50;
+$border-radius: 12px;
+$box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+// Base styles
+.auth-container {
+    display: flex;
+    min-height: 100vh;
+    font-family: 'Segoe UI', 'Roboto', sans-serif;
+    position: relative;
+}
+
+.auth-background {
+    flex: 1;
+    background: linear-gradient(135deg, $primary-color 0%, $accent-color 100%);
+    position: relative;
+    overflow: hidden;
+    display: none; // Hide on mobile
+
+    @media (min-width: 992px) {
+        display: block;
+    }
+}
+
+.auth-decoration {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    .decoration-circle {
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        top: -150px;
+        right: -150px;
+    }
+
+    .decoration-wave {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100px;
+        background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="%23ffffff" opacity=".1"/></svg>');
+        background-size: cover;
+    }
+}
+
+// Auth card
+.auth-card {
+    width: 100%;
+    max-width: 480px;
+    padding: 2rem;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    @media (min-width: 992px) {
+        width: 480px;
+        padding: 3rem;
+        box-shadow: $box-shadow;
+    }
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+
+    .app-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: $primary-color;
+        margin-bottom: 1.5rem;
+
+        i {
+            font-size: 1.8rem;
+        }
+    }
+
+    h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: $dark-color;
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        color: lighten($dark-color, 30%);
+        font-size: 1rem;
+    }
+}
+
+// Form elements
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: $dark-color;
+    }
+}
+
+.input-field {
+    display: flex;
+    align-items: center;
+    border: 1px solid lighten($dark-color, 70%);
+    border-radius: $border-radius;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+
+    &:focus-within {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    }
+
+    &.invalid {
+        border-color: $error-color;
+    }
+
+    i {
+        color: lighten($dark-color, 50%);
+        margin-right: 0.75rem;
+        font-size: 1rem;
+    }
+
+    input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-size: 1rem;
+        background: transparent;
+
+        &::placeholder {
+            color: lighten($dark-color, 60%);
+        }
+    }
+
+    .password-toggle {
+        background: none;
+        border: none;
+        color: lighten($dark-color, 50%);
+        cursor: pointer;
+        padding: 0.25rem;
+        font-size: 1rem;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: $primary-color;
+        }
+    }
+}
+
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: $error-color;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+
+    i {
+        font-size: 0.9rem;
+    }
+}
+
+// Options row
+.options-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+
+    .remember-me {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: lighten($dark-color, 30%);
+        cursor: pointer;
+
+        input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 1px solid lighten($dark-color, 60%);
+            border-radius: 4px;
+            position: relative;
+            transition: all 0.2s ease;
+
+            &::after {
+                content: '';
+                position: absolute;
+                display: none;
+                left: 6px;
+                top: 2px;
+                width: 4px;
+                height: 9px;
+                border: solid white;
+                border-width: 0 2px 2px 0;
+                transform: rotate(45deg);
+            }
+        }
+
+        input:checked~.checkmark {
+            background: $primary-color;
+            border-color: $primary-color;
+
+            &::after {
+                display: block;
+            }
+        }
+    }
+
+    .forgot-password {
+        color: lighten($dark-color, 30%);
+        text-decoration: none;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: $primary-color;
+        }
+    }
+}
+
+// Buttons
+.auth-button {
+    padding: 1rem;
+    border-radius: $border-radius;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+
+    &.primary {
+        background: $primary-color;
+        color: white;
+
+        &:hover:not(:disabled) {
+            background: $secondary-color;
+            transform: translateY(-2px);
+        }
+
+        &:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+    }
+
+    .spinner {
+        width: 18px;
+        height: 18px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+    }
+}
+
+// Divider
+.auth-divider {
+    display: flex;
+    align-items: center;
+    color: lighten($dark-color, 50%);
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+
+    &::before,
+    &::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid lighten($dark-color, 80%);
+    }
+
+    &::before {
+        margin-right: 1rem;
+    }
+
+    &::after {
+        margin-left: 1rem;
+    }
+}
+
+// Social auth
+.social-auth {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    .social-button {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 1px solid lighten($dark-color, 80%);
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        &.google {
+            color: #DB4437;
+        }
+
+        &.github {
+            color: #333;
+        }
+
+        &.microsoft {
+            color: #0078D7;
+        }
+    }
+}
+
+// Footer
+.auth-footer {
+    text-align: center;
+    color: lighten($dark-color, 30%);
+    font-size: 0.95rem;
+
+    a {
+        color: $primary-color;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: $secondary-color;
+        }
+    }
+}
+
+// Error message
+.auth-error {
+    background: rgba($error-color, 0.1);
+    color: $error-color;
+    padding: 1rem;
+    border-radius: $border-radius;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+
+    i {
+        font-size: 1.1rem;
+    }
+}
+
+// Animations
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -5,7 +5,7 @@ import { Task } from '../../models/task.model';
 @Component({
   selector: 'app-task-list',
   templateUrl: './task-list.component.html',
-  styleUrls: ['./task-list.component.css'],
+  styleUrls: ['./task-list.component.scss'],
   standalone: false
 })
 export class TaskListComponent implements OnInit {
@@ -59,10 +59,12 @@ export class TaskListComponent implements OnInit {
         if (index !== -1) {
           this.tasks[index] = updatedTask;
         }
+        this.loadTasks();
       },
       error: (err) => {
         this.error = 'Failed to update task: ' + err.message;
       }
     });
+    location.reload();
   }
 }
